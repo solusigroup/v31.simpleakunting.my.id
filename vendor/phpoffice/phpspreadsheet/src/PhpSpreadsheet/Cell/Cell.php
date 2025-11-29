@@ -247,6 +247,8 @@ class Cell implements Stringable
      *
      * @param mixed $value Value
      * @param string $dataType Explicit data type, see DataType::TYPE_*
+     *        This parameter is currently optional (default = string).
+     *        Omitting it is ***DEPRECATED***, and the default will be removed in a future release.
      *        Note that PhpSpreadsheet does not validate that the value and datatype are consistent, in using this
      *             method, then it is your responsibility as an end-user developer to validate that the value and
      *             the datatype match.
@@ -453,6 +455,7 @@ class Cell implements Stringable
                 }
                 $newColumn = $this->getColumn();
                 if (is_array($result)) {
+                    $result = self::convertSpecialArray($result);
                     $this->formulaAttributes['t'] = 'array';
                     $this->formulaAttributes['ref'] = $maxCoordinate = $coordinate;
                     $newRow = $row = $this->getRow();
@@ -579,6 +582,36 @@ class Cell implements Stringable
         }
 
         return $this->convertDateTimeInt($this->value);
+    }
+
+    /**
+     * Convert array like the following (preserve values, lose indexes):
+     * [
+     *   rowNumber1 => [colLetter1 => value, colLetter2 => value ...],
+     *   rowNumber2 => [colLetter1 => value, colLetter2 => value ...],
+     *   ...
+     * ].
+     *
+     * @param mixed[] $array
+     *
+     * @return mixed[]
+     */
+    private static function convertSpecialArray(array $array): array
+    {
+        $newArray = [];
+        foreach ($array as $rowIndex => $row) {
+            if (!is_int($rowIndex) || $rowIndex <= 0 || !is_array($row)) {
+                return $array;
+            }
+            $keys = array_keys($row);
+            $key0 = $keys[0] ?? '';
+            if (!is_string($key0)) {
+                return $array;
+            }
+            $newArray[] = array_values($row);
+        }
+
+        return $newArray;
     }
 
     /**

@@ -330,15 +330,37 @@ class ReferenceHelper
     protected function adjustProtectedCells(Worksheet $worksheet, int $numberOfColumns, int $numberOfRows): void
     {
         $aProtectedCells = $worksheet->getProtectedCellRanges();
-        ($numberOfColumns > 0 || $numberOfRows > 0)
-            ? uksort($aProtectedCells, [self::class, 'cellReverseSort'])
-            : uksort($aProtectedCells, [self::class, 'cellSort']);
-        foreach ($aProtectedCells as $cellAddress => $protectedRange) {
-            $newReference = $this->updateCellReference($cellAddress);
-            if ($cellAddress !== $newReference) {
-                $worksheet->unprotectCells($cellAddress);
-                if ($newReference) {
-                    $worksheet->protectCells($newReference, $protectedRange->getPassword(), true);
+        /** @var CellReferenceHelper */
+        $cellReferenceHelper = $this->cellReferenceHelper;
+        if ($numberOfRows >= 0 && $numberOfColumns >= 0) {
+            foreach ($aProtectedCells as $key2 => $value) {
+                $ranges = $value->allRanges();
+                $newKey = $separator = '';
+                foreach ($ranges as $key => $range) {
+                    $oldKey = $range[0] . (array_key_exists(1, $range) ? (':' . $range[1]) : '');
+                    $newKey .= $separator . $this->updateCellReference($oldKey);
+                    $separator = ' ';
+                }
+                if ($key2 !== $newKey) {
+                    $worksheet->unprotectCells($key2);
+                    $worksheet->protectCells($newKey, $value->getPassword(), true, $value->getName(), $value->getSecurityDescriptor());
+                }
+            }
+        } else {
+            foreach ($aProtectedCells as $key2 => $value) {
+                $range = str_replace([' ', ',', "\0"], ["\0", ' ', ','], $key2);
+                $extracted = Coordinate::extractAllCellReferencesInRange($range);
+                $outArray = [];
+                foreach ($extracted as $cellAddress) {
+                    if (!$cellReferenceHelper->cellAddressInDeleteRange($cellAddress)) {
+                        $outArray[$this->updateCellReference($cellAddress)] = 'x';
+                    }
+                }
+                $outArray2 = Coordinate::mergeRangesInCollection($outArray);
+                $newKey = implode(' ', array_keys($outArray2));
+                if ($key2 !== $newKey) {
+                    $worksheet->unprotectCells($key2);
+                    $worksheet->protectCells($newKey, $value->getPassword(), true, $value->getName(), $value->getSecurityDescriptor());
                 }
             }
         }
@@ -1045,7 +1067,7 @@ class ReferenceHelper
     {
         $cellAddress = $definedName->getValue();
         $asFormula = ($cellAddress[0] === '=');
-        if ($definedName->getWorksheet() !== null && $definedName->getWorksheet()->getHashInt() === $worksheet->getHashInt()) {
+        if ($definedName->getWorksheet() === $worksheet) {
             /**
              * If we delete the entire range that is referenced by a Named Range, MS Excel sets the value to #REF!
              * PhpSpreadsheet still only does a basic adjustment, so the Named Range will still reference Cells.
@@ -1064,7 +1086,7 @@ class ReferenceHelper
 
     private function updateNamedFormula(DefinedName $definedName, Worksheet $worksheet, string $beforeCellAddress, int $numberOfColumns, int $numberOfRows): void
     {
-        if ($definedName->getWorksheet() !== null && $definedName->getWorksheet()->getHashInt() === $worksheet->getHashInt()) {
+        if ($definedName->getWorksheet() === $worksheet) {
             /**
              * If we delete the entire range that is referenced by a Named Formula, MS Excel sets the value to #REF!
              * PhpSpreadsheet still only does a basic adjustment, so the Named Formula will still reference Cells.

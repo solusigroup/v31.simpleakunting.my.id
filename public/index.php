@@ -1,20 +1,20 @@
 <?php
-// Aktifkan pelaporan error selama masa pengembangan
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
-// Mulai session
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+// Determine if the application is in maintenance mode...
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
 }
 
-// 1. **MEMUAT AUTOLOADER COMPOSER (INI YANG PALING PENTING)**
-// Path ini akan memuat semua library eksternal, termasuk PhpSpreadsheet.
-require_once __DIR__ . '/../vendor/autoload.php';
+// Register the Composer autoloader...
+require __DIR__.'/../vendor/autoload.php';
 
-// 2. Memuat file inisialisasi aplikasi kita (setelah library siap)
-require_once '../app/init.php';
+// Bootstrap Laravel and handle the request...
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-// 3. Menjalankan aplikasi
-$app = new App();
-
+$app->handleRequest(Request::capture());

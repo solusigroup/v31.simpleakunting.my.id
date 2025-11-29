@@ -1,0 +1,15 @@
+Options -Multiviews
+RewriteEngine On
+
+# Aturan untuk memaksa koneksi aman (HTTPS)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Karena domain sudah menunjuk ke folder public, RewriteBase cukup '/'
+RewriteBase /
+
+# Aturan routing MVC utama
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
