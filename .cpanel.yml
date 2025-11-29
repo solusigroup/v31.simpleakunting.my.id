@@ -1,6 +1,4 @@
----
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/simpleak/v2.simpleakunting.biz.id/
-    - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp style.css $DEPLOYPATH
+    - export DEPLOYPATH=/home/simpleak/v2.simpleakunting/
+    - /bin/cp -R * $DEPLOYPATH
