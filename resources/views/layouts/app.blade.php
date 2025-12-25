@@ -120,7 +120,7 @@
             <div class="nav-item text-nowrap">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="nav-link px-3 bg-dark border-0">Sign out</button>
+                    <button type="submit" class="nav-link px-3 border-0 text-white" style="background-color: rgba(0, 0, 0, .25); box-shadow: inset 1px 0 0 rgba(0, 0, 0, .25); height: 100%; font-size: 1rem; padding-top: .75rem; padding-bottom: .75rem;">Sign out</button>
                 </form>
             </div>
         </div>
