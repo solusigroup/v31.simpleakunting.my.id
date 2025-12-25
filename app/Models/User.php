@@ -14,6 +14,16 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $primaryKey = 'id_user';
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'id_user';
+    }
     
     // Legacy schema uses 'nama_user' instead of 'name' or 'email' for login
     // and 'password_hash' for password

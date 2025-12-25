@@ -32,7 +32,7 @@ class UserController extends Controller
             'nama_user' => $request->nama_user,
             'password_hash' => Hash::make($request->password),
             'role' => $request->role,
-            'jabatan' => $request->jabatan,
+            'jabatan' => $request->jabatan ?? '',
         ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
@@ -55,7 +55,7 @@ class UserController extends Controller
         $data = [
             'nama_user' => $request->nama_user,
             'role' => $request->role,
-            'jabatan' => $request->jabatan,
+            'jabatan' => $request->jabatan ?? '',
         ];
 
         if ($request->filled('password')) {
