@@ -46,6 +46,13 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Developer Credit -->
+        <div class="text-center mt-4">
+            <p class="text-muted small mb-0">
+                Developed by <a href="https://simpleakunting.my.id" target="_blank" class="text-decoration-none">Kurniawan</a>
+            </p>
+        </div>
     </div>
 </body>
 </html>
