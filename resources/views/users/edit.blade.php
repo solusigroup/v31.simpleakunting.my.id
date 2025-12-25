@@ -40,9 +40,9 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
-                                <option value="superuser" {{ old('role', $user->role) == 'superuser' ? 'selected' : '' }}>Superuser</option>
-                                <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="staff" {{ old('role', $user->role) == 'staff' ? 'selected' : '' }}>Staff</option>
+                                @foreach($roles as $value => $label)
+                                    <option value="{{ $value }}" {{ old('role', $user->role) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
                             </select>
                             @error('role')
                                 <div class="invalid-feedback">{{ $message }}</div>

@@ -46,7 +46,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'nama_user' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string'],
+            'role' => ['required', 'string', 'in:admin,manajer,staff'],  // superuser tidak diizinkan
             'jabatan' => ['required', 'string'],
         ]);
 

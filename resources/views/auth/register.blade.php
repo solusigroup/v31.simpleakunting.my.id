@@ -42,10 +42,10 @@
                             <div class="mb-3">
                                 <label for="role" class="form-label">Role</label>
                                 <select class="form-select" id="role" name="role" required>
-                                    <option value="superuser">Superuser</option>
+                                    <option value="">-- Pilih Role --</option>
                                     <option value="admin">Admin</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="staff">Staff</option>
+                                    <option value="manajer">Manajer</option>
+                                    <option value="staff" selected>Staff</option>
                                 </select>
                             </div>
                             <div class="mb-3">

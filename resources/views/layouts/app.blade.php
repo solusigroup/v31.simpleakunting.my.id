@@ -139,7 +139,8 @@
                         </li>
                     </ul>
 
-                    <!-- Master Data -->
+                    <!-- Master Data - Only for manajer, admin, superuser -->
+                    @if(auth()->user()->canViewMasterData())
                     @php
                         $isMasterActive = request()->routeIs('pelanggan.*') || request()->routeIs('pemasok.*') || request()->routeIs('persediaan.*') || request()->routeIs('akun.*');
                     @endphp
@@ -178,6 +179,7 @@
                             </li>
                         </ul>
                     </div>
+                    @endif
 
                     <!-- Transaksi -->
                     @php
@@ -247,7 +249,8 @@
                         </ul>
                     </div>
 
-                    <!-- Laporan -->
+                    <!-- Laporan - Only for manajer, admin, superuser -->
+                    @if(auth()->user()->canViewReports())
                     @php
                         $isLaporanActive = request()->routeIs('bukubesar.*') || request()->routeIs('laporan.*');
                     @endphp
@@ -299,6 +302,7 @@
                         <li class="nav-item">
                     </ul>
                     </div>
+                    @endif
 
                     <!-- Koperasi Simpan Pinjam -->
                     @php
@@ -331,18 +335,31 @@
                                     Pinjaman
                                 </a>
                             </li>
+                            @if(auth()->user()->canApprove())
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('approval.*') ? 'active' : '' }}" href="{{ route('approval.inbox') }}">
                                     <span data-feather="check-square"></span>
                                     Approval
                                 </a>
                             </li>
+                            @endif
                         </ul>
                     </div>
 
-                    <!-- Admin -->
+                    <!-- Import/Export - Only for manajer, admin, superuser -->
+                    @if(auth()->user()->canImportExport())
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <a href="{{ route('import-export.index') }}" class="text-decoration-none text-muted">
+                            <span data-feather="upload-cloud" class="me-1"></span>
+                            Import/Export
+                        </a>
+                    </h6>
+                    @endif
+
+                    <!-- Admin - Only for admin, superuser -->
+                    @if(auth()->user()->canManageUsers())
                     @php
-                        $isAdminActive = request()->routeIs('perusahaan.*') || request()->routeIs('users.*');
+                        $isAdminActive = request()->routeIs('perusahaan.*') || request()->routeIs('users.*') || request()->routeIs('database.*');
                     @endphp
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" 
                         data-bs-toggle="collapse" 
@@ -353,25 +370,21 @@
                     </h6>
                     <div class="collapse {{ $isAdminActive ? 'show' : '' }}" id="adminMenu" data-bs-parent="#sidebarAccordion">
                         <ul class="nav flex-column mb-2 nav-group">
+                            @if(auth()->user()->canManageCompany())
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('perusahaan.*') ? 'active' : '' }}" href="{{ route('perusahaan.edit') }}">
                                     <span data-feather="settings"></span>
                                     Profil Perusahaan
                                 </a>
                             </li>
+                            @endif
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
                                     <span data-feather="users"></span>
                                     Manajemen User
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('import-export.*') ? 'active' : '' }}" href="{{ route('import-export.index') }}">
-                                    <span data-feather="upload-cloud"></span>
-                                    Import/Export Data
-                                </a>
-                            </li>
-                            @if(auth()->user() && auth()->user()->role === 'superuser')
+                            @if(auth()->user()->canAccessDatabase())
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('database.*') ? 'active' : '' }}" href="{{ route('database.index') }}">
                                     <span data-feather="database"></span>
@@ -381,6 +394,7 @@
                             @endif
                         </ul>
                     </div>
+                    @endif
                 </div>
             </nav>
 
