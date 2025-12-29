@@ -22,8 +22,10 @@ class JenisPinjamanController extends Controller
      */
     public function create()
     {
-        $akunPiutang = Akun::where('klasifikasi', '1')->orderBy('kode_akun')->get();
-        $akunPendapatan = Akun::where('klasifikasi', '4')->orderBy('kode_akun')->get();
+        // Akun Piutang (Aset = kode dimulai dengan 1)
+        $akunPiutang = Akun::where('kode_akun', 'LIKE', '1-%')->orderBy('kode_akun')->get();
+        // Akun Pendapatan (kode dimulai dengan 4)
+        $akunPendapatan = Akun::where('kode_akun', 'LIKE', '4-%')->orderBy('kode_akun')->get();
         return view('jenis-pinjaman.create', compact('akunPiutang', 'akunPendapatan'));
     }
 
@@ -63,8 +65,10 @@ class JenisPinjamanController extends Controller
     public function edit(string $id)
     {
         $jenisPinjaman = JenisPinjaman::findOrFail($id);
-        $akunPiutang = Akun::where('klasifikasi', '1')->orderBy('kode_akun')->get();
-        $akunPendapatan = Akun::where('klasifikasi', '4')->orderBy('kode_akun')->get();
+        // Akun Piutang (Aset = kode dimulai dengan 1)
+        $akunPiutang = Akun::where('kode_akun', 'LIKE', '1-%')->orderBy('kode_akun')->get();
+        // Akun Pendapatan (kode dimulai dengan 4)
+        $akunPendapatan = Akun::where('kode_akun', 'LIKE', '4-%')->orderBy('kode_akun')->get();
         return view('jenis-pinjaman.edit', compact('jenisPinjaman', 'akunPiutang', 'akunPendapatan'));
     }
 

@@ -51,7 +51,6 @@ Route::middleware('auth')->group(function () {
         Route::get('pemasok', [PemasokController::class, 'index'])->name('pemasok.index');
         Route::get('pemasok/{pemasok}', [PemasokController::class, 'show'])->name('pemasok.show');
         Route::get('persediaan', [PersediaanController::class, 'index'])->name('persediaan.index');
-        Route::get('persediaan/{persediaan}', [PersediaanController::class, 'show'])->name('persediaan.show');
         Route::get('akun', [AkunController::class, 'index'])->name('akun.index');
     });
     

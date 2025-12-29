@@ -55,6 +55,9 @@
                                 <option value="serba_usaha" {{ old('jenis_usaha', $perusahaan->jenis_usaha ?? '') == 'serba_usaha' ? 'selected' : '' }}>
                                     Koperasi Serba Usaha (COA Dagang + Simpan Pinjam)
                                 </option>
+                                <option value="jasa" {{ old('jenis_usaha', $perusahaan->jenis_usaha ?? '') == 'jasa' ? 'selected' : '' }}>
+                                    Usaha Jasa (Tanpa HPP)
+                                </option>
                             </select>
                             @error('jenis_usaha')
                                 <div class="invalid-feedback">{{ $message }}</div>

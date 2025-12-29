@@ -84,6 +84,7 @@
                         </div>
 
                         <h5 class="mt-4">Pengaturan Akun (Opsional)</h5>
+                        @if(($jenisUsaha ?? 'dagang') !== 'jasa')
                         <div class="mb-3">
                             <label for="akun_persediaan" class="form-label">Akun Persediaan</label>
                             <select class="form-select @error('akun_persediaan') is-invalid @enderror" id="akun_persediaan" name="akun_persediaan">
@@ -109,6 +110,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        @endif
 
                         <div class="mb-3">
                             <label for="akun_penjualan" class="form-label">Akun Penjualan</label>

@@ -109,7 +109,9 @@ class PenjualanController extends Controller
                 // Jurnal HPP & Persediaan (Perpetual)
                 // Debit: HPP
                 // Kredit: Persediaan
-                if ($data['barang']->akun_hpp && $data['barang']->akun_persediaan) {
+                // Skip HPP untuk perusahaan jasa
+                $jenisUsaha = DB::table('perusahaan')->where('id', 1)->value('jenis_usaha') ?? 'dagang';
+                if ($jenisUsaha !== 'jasa' && $data['barang']->akun_hpp && $data['barang']->akun_persediaan) {
                     $totalHPP = $data['barang']->harga_beli * $data['kuantitas'];
                     
                     // Debit HPP

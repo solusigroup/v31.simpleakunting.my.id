@@ -19,7 +19,9 @@ class PersediaanController extends Controller
     {
         // Ambil semua akun untuk dropdown
         $akun = Akun::all();
-        return view('persediaan.create', compact('akun'));
+        // Ambil jenis usaha untuk conditional display
+        $jenisUsaha = DB::table('perusahaan')->where('id', 1)->value('jenis_usaha') ?? 'dagang';
+        return view('persediaan.create', compact('akun', 'jenisUsaha'));
     }
 
     public function store(Request $request)
@@ -62,7 +64,9 @@ class PersediaanController extends Controller
     {
         $persediaan = Persediaan::findOrFail($id);
         $akun = Akun::all();
-        return view('persediaan.edit', compact('persediaan', 'akun'));
+        // Ambil jenis usaha untuk conditional display
+        $jenisUsaha = DB::table('perusahaan')->where('id', 1)->value('jenis_usaha') ?? 'dagang';
+        return view('persediaan.edit', compact('persediaan', 'akun', 'jenisUsaha'));
     }
 
     public function update(Request $request, $id)

@@ -27,7 +27,7 @@ class PerusahaanController extends Controller
             'alamat' => 'nullable|string',
             'telepon' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
-            'jenis_usaha' => 'required|in:dagang,simpan_pinjam,serba_usaha',
+            'jenis_usaha' => 'required|in:dagang,simpan_pinjam,serba_usaha,jasa',
             'nama_direktur' => 'nullable|string|max:255',
             'nama_akuntan' => 'nullable|string|max:255',
         ]);
