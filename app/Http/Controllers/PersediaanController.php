@@ -15,6 +15,12 @@ class PersediaanController extends Controller
         return view('persediaan.index', compact('persediaan'));
     }
 
+    public function show($id)
+    {
+        // Redirect to edit page since there's no separate show view
+        return redirect()->route('persediaan.edit', $id);
+    }
+
     public function create()
     {
         // Ambil semua akun untuk dropdown
